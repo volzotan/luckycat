@@ -1,24 +1,47 @@
 // ---------- PRINT
 
-//base();
+base();
 translate([0, 70]) armholder();
 translate([0, 105]) espholder();
-//translate([0, -65, 0]) color("blue") servo();
-//
-//% translate([17, 120-26/2, 30]) rotate([0, 0, 0]) color("grey") esp();
-//
-//// ---------- TEST
-//
-//translate([140, 0, 12]) rotate([180, 0, 0]) base();
-//translate([190-27.5, -30/2, 12]) rotate([0, -90, 0]) armholder();
-//translate([120, +30/2, 12]) rotate([0, -90, 180]) espholder();
-//
-//translate([145, -12.4/2, 66.25]) rotate([0, 90, 0]) servo();
-//translate([140, -26/2, 30]) rotate([0, -90, 0]) color("grey") esp();
-//
-//translate([180, -5, 0]) color([0.3, 0.3, 0.3], 0.3) cube([10, 10, 60]);
+translate([0, -65, 0]) color("blue") servo();
+
+% translate([17, 120-26/2, 30]) rotate([0, 0, 0]) color("grey") esp();
+
+// ---------- TEST
+
+translate([-80, 0, 0]) grip();
+translate([140, 0, 12]) rotate([180, 0, 0]) base();
+translate([190-27.5, -30/2, 12]) rotate([0, -90, 0]) armholder();
+translate([120, +30/2, 12]) rotate([0, -90, 180]) espholder();
+
+translate([145, -12.4/2, 66.25]) rotate([0, 90, 0]) servo();
+translate([140, -26/2, 30]) rotate([0, -90, 0]) color("grey") esp();
+
+translate([180, -5, 0]) color([0.3, 0.3, 0.3], 0.3) cube([10, 10, 60]);
 
 
+module grip() {
+    difference() {
+        union() {
+            cylinder($fn=32, d=24.1, h=9+3);
+        }
+        
+        // topside
+        translate([0, 0, 5]) cylinder($fn=32, d=20, h=10);
+        translate([0, 0, 4]) cylinder($fn=32, d=12+.3, h=10);
+        rotate([0, 0, 90+45]) translate([0, -5.5/2, 5]) cube([20, 5.5, 10]);
+        rotate([0, 0, -45]) translate([0, -5.5/2, 5]) cube([20, 5.5, 10]);
+        
+        
+        // underside
+        translate([0, 0, -1]) cylinder($fn=32, d=7+.3, h=1+3);
+        hull() {
+            translate([0, 0, -1]) cylinder($fn=32, d=5.3+.3, h=1+3);
+            translate([14, 0, -1]) cylinder($fn=32, d=4.0+.3, h=1+3);
+            translate([-14, 0, -1]) cylinder($fn=32, d=4.0+.3, h=1+3);
+        }
+    }
+}
 
 module base() {
     diam = 100;
@@ -34,7 +57,7 @@ module base() {
         
         // opening
 //        translate([0, 0, -1]) cylinder($fn=32, h=10, d=30);
-        translate([-18, -12/2, -1]) block(20, 12, 10, crad=3);
+        translate([-18-.2, -12/2, -1]) block(20, 12, 10, crad=3);
         
         // screw hole cat
         translate([0, -40, -1]) cylinder($fn=32, d=2, h=10);
