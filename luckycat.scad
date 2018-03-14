@@ -14,10 +14,10 @@ translate([140, 0, 12]) rotate([180, 0, 0]) base();
 translate([190-27.5, -30/2, 12]) rotate([0, -90, 0]) armholder();
 translate([120, +30/2, 12]) rotate([0, -90, 180]) espholder();
 
-translate([145, -12.4/2, 66.25]) rotate([0, 90, 0]) servo();
-translate([140, -26/2, 30]) rotate([0, -90, 0]) color("grey") esp();
+translate([145, -12.4/2, 78.25]) rotate([0, 90, 0]) servo();
+translate([128.5, -26/2, 30]) rotate([0, -90, 0]) color("grey") esp();
 
-translate([180, -5, 0]) color([0.3, 0.3, 0.3], 0.3) cube([10, 10, 60]);
+translate([180, -5, 12]) color([0.3, 0.3, 0.3], 0.3) cube([10, 10, 60]);
 
 
 module grip() {
@@ -46,41 +46,54 @@ module grip() {
 module base() {
     diam = 100;
     w = 2.0+.1;
-    
+        
     difference() {
         union() {
-            cylinder($fn=64, h=1.2, d=diam);
-            cylinder($fn=64, h=12, d=diam);
+            
+            difference() {
+                union() {
+                    cylinder($fn=64, h=1.2, d=diam);
+                    cylinder($fn=64, h=12, d=diam);
+                }
+                
+                translate([0, 0, 1.2]) cylinder($fn=64, h=12, d=diam-2*w);
+            } 
+            
+            // cable fastener
+            translate([-23/2, -25.5]) block(23, 7, 6, crad=1);
         }
-        
-        translate([0, 0, 1.2]) cylinder($fn=64, h=12, d=diam-2*w);
-        
+            
         // opening
-//        translate([0, 0, -1]) cylinder($fn=32, h=10, d=30);
-        translate([-18-.2, -12/2, -1]) block(20, 12, 10, crad=3);
+        translate([-18-.2, -14/2, -1]) block(20, 14, 10, crad=1);
         
         // screw hole cat
         translate([0, -40, -1]) cylinder($fn=32, d=2, h=10);
         
         // screw hole arm holder 
-        translate([19.5-2.5, 10.5, -1]) cylinder($fn=32, d=3.3, h=10);
-        translate([19.5-2.5, -10.5, -1]) cylinder($fn=32, d=3.3, h=10);
+        translate([19.5-2.5, 9.5, -1]) cylinder($fn=32, d=3.3, h=10);
+        translate([19.5-2.5, -9.5, -1]) cylinder($fn=32, d=3.3, h=10);
         
         // screw hole esp holder 
-        translate([-19.5+5, 11.5, -1]) cylinder($fn=32, d=3.3, h=10);
-        translate([-19.5+5, -11.5, -1]) cylinder($fn=32, d=3.3, h=10);
+        translate([-19.5+5, 12.5, -1]) cylinder($fn=32, d=3.3, h=10);
+        translate([-19.5+5, -12.5, -1]) cylinder($fn=32, d=3.3, h=10);
         
         // usb cable
         hull() {
             translate([0, -1, 6]) rotate([90, 0, 0]) cylinder($fn=32, d=5.5, h=100);
             translate([0, -1, 12+3]) rotate([90, 0, 0]) cylinder($fn=32, d=5.5, h=100);
         }
+        
+        // cable fastener
+        translate([-16/2, -22, -1]) rotate([0, 0, 0]) {
+            cylinder($fn=32, d=3.3, h=10);
+            translate([16, 0]) cylinder($fn=32, d=3.3, h=10);
+        }
     } 
 }
 
 
 module armholder() {
-    length = 60;
+    length = 70;
     
     difference() {
        union() {
@@ -94,17 +107,18 @@ module armholder() {
         }
         
         // servo hole
-        translate([31.25, 30/2-12.5/2, -1]) cube([22.7+0.5, 12+0.5, 10]);
-        translate([31.25-2.1, 30/2, -1]) cylinder($fn=32, d=2, h=10);
-        translate([31.25+(22.7+0.5)+2.1, 30/2, -1]) cylinder($fn=32, d=2, h=10);
+        translate([43.25, 30/2-12.5/2, -1]) cube([22.7+0.5, 12+0.5, 10]);
+        translate([43.25-2.1, 30/2, -1]) cylinder($fn=32, d=2.3, h=10);
+        translate([43.25+(22.7+0.5)+2.1, 30/2, -1]) cylinder($fn=32, d=2.3, h=10);
         
         // screw hole
-        translate([10-1, 4.5, 5.5]) rotate([0, -90, 0]) cylinder($fn=32, d=3.3, h=10);
-        translate([10+2, 4.5, 5.5]) rotate([0, -90, 0]) cylinder($fn=6, d=6.7, h=10);
-        translate([10-1, 30-4.5, 5.5]) rotate([0, -90, 0]) cylinder($fn=32, d=3.3, h=10);
-        translate([10+2, 30-4.5, 5.5]) rotate([0, -90, 0]) cylinder($fn=6, d=6.7, h=10);
+        translate([10-1, 5.5, 5.5]) rotate([0, -90, 0]) cylinder($fn=32, d=3.3, h=10);
+        translate([10+2, 5.5, 5.5]) rotate([0, -90, 0]) rotate([0, 0, 30]) cylinder($fn=6, d=6.7, h=10);
+        translate([10-1, 30-5.5, 5.5]) rotate([0, -90, 0]) cylinder($fn=32, d=3.3, h=10);
+        translate([10+2, 30-5.5, 5.5]) rotate([0, -90, 0]) rotate([0, 0, 30]) cylinder($fn=6, d=6.7, h=10);
     }
 }
+
 
 module espholder() {
     length=65;
@@ -119,24 +133,24 @@ module espholder() {
             }
             
             hull() {
-                translate([8, -2, 0]) cube([2, 34, 1.8]);
+                translate([8, -3, 0]) cube([2, 36, 1.8]);
                 translate([12, 0, 0]) cube([1, 30, 1.8]);
             }
             
             // spacer
-            translate([65-1.75, 0]) color("green") block(5.75, 4.75, 4+h, crad=1);
-            translate([65-1.75, 30-4.75]) color("green") block(5.75, 4+h, 4, crad=1);
-            translate([13.75, 0]) color("green") block(5.75, 4.75, 4+h, crad=1);
-            translate([13.75, 30-4.75]) color("green") block(5.75, 4.75, 4+h, crad=1);
+            translate([65-1.75, 0]) color("green") block(5.75, 4.75, 4.5+h, crad=1);
+            translate([65-1.75, 30-4.75]) color("green") block(5.75, 4.75, 4.5+h, crad=1);
+            translate([13.75, 0]) color("green") block(5.75, 4.75, 4.5+h, crad=1);
+            translate([13.75, 30-4.75]) color("green") block(5.75, 4.75, 4.5+h, crad=1);
             
-            translate([0, 34-2]) rotate([90, 0, 0]) linear_extrude(height=34) polygon([[0, 0], [10, 0], [4, 10], [0, 10]]);
+            translate([0, 36-3]) rotate([90, 0, 0]) linear_extrude(height=36) polygon([[0, 0], [10, 0], [4, 10], [0, 10]]);
         }
         
         // screw hole mount
-        translate([10-1, -1+4.5, 5.5]) rotate([0, -90, 0]) cylinder($fn=32, d=3.3, h=10);
-        translate([10+2, -1+4.5, 5.5]) rotate([0, -90, 0]) cylinder($fn=6, d=6.7, h=10);
-        translate([10-1, 1+30-4.5, 5.5]) rotate([0, -90, 0]) cylinder($fn=32, d=3.3, h=10);
-        translate([10+2, 1+30-4.5, 5.5]) rotate([0, -90, 0]) cylinder($fn=6, d=6.7, h=10);
+        translate([10-1, -2+4.5, 5.5]) rotate([0, -90, 0]) cylinder($fn=32, d=3.3, h=10);
+        translate([10+2, -2+4.5, 5.5]) rotate([0, -90, 0]) rotate([0, 0, 30]) cylinder($fn=6, d=6.7, h=10);
+        translate([10-1, 2+30-4.5, 5.5]) rotate([0, -90, 0]) cylinder($fn=32, d=3.3, h=10);
+        translate([10+2, 2+30-4.5, 5.5]) rotate([0, -90, 0]) rotate([0, 0, 30]) cylinder($fn=6, d=6.7, h=10);
         
         // esp screw
         translate([65-(49-5)-1.5, 4.5, -1]) cylinder($fn=32, d=2.5, h=10);
@@ -145,7 +159,7 @@ module espholder() {
         translate([65-(49-5)-1.5, 30-4.5, -1]) cylinder($fn=32, d=2.5, h=10);
         
         // usb
-        translate([09, 30/2-12/2, 1.8]) rotate([0, -90]) block(20, 12, 20);
+        translate([09, 30/2-14/2, 1.8]) rotate([0, -90]) block(20, 14, 20, crad=1);
     }
 }
 
