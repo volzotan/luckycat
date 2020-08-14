@@ -1,0 +1,1 @@
+arduino-cli upload -b esp8266:esp8266:nodemcu -p /dev/tty.wchusbserial*
